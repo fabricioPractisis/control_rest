@@ -1,6 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>CONTROL RESTAURANTE</title>
 
@@ -386,10 +394,10 @@ $(document).ready(function() {
 		<!--<input type="submit" name="submit" value="Login" onclick='enviaDatos()' style='font-family:Arial;'/><!--END LOGIN BUTTON-->
 		
 		<button class="button"  type="button" id = 'sin_loguear' style = 'display:none;' onclick="valida_log_acceso()">
-			Validad
+			Ingresar
 			<img src = 'img/loading.gif' style = 'display:none;width:20px;' id = 'loadLogin'/>
 		</button>
-		<button class="button"  type="button" id = 'ya_logueado' onclick="valida_log_acceso_conSesion()" >Ingresar</button>
+		<button class="button"  type="button" id = 'ya_logueado' onclick="valida_log_acceso_conSesion()" >Validad</button>
     </div>
     
 
@@ -444,7 +452,7 @@ $(document).ready(function() {
 			$.post("http://www.lcodigo.com/ticket/apiMovil/baja_empresas.php",{ 
 				pass : pass , username : username
 			}).done(function(data){
-				//alert(data);
+				alert(data);
 				if($.trim(data)=='error'){
 					alert('no hay datos para ese evento : ' + id_con)
 				}else{
@@ -490,9 +498,7 @@ $(document).ready(function() {
 						}, 2000);
 					}
 				}
-			}).fail(function(xhr, status, error) {
-				alert(status);
-			});	
+			});
 		}
 	}
 </script>
