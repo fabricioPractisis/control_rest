@@ -409,8 +409,13 @@
 			var d = hoy.getDate();
 			var m = hoy.getMonth();
 			var a = hoy.getFullYear();
-			
-			var fechaA = (a)+'/'+(m+1)+'/'+d
+			var mes = '';
+			if(m>=1 || m <=9){
+				mes = ('0'+(m+1));
+			}else{
+				mes = (m+1)
+			}
+			var fechaA = (a)+'-'+mes+'-'+d;
 			$('#fechaActual').html('hoy es : ' + fechaA);
 		});
 		
@@ -534,7 +539,13 @@
 				var m = hoy.getMonth();
 				var a = hoy.getFullYear();
 				
-				var fechaA = (a)+'/'+(m+1)+'/'+d
+				var mes = '';
+				if(m>=1 || m <=9){
+					mes = ('0'+(m+1));
+				}else{
+					mes = (m+1)
+				}
+				var fechaA = (a)+'-'+mes+'-'+d;
 				var fecha = fechaA;
 				
 				$("input[name='menu_check[]']:checked").each(function() {
