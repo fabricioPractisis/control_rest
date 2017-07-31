@@ -37,10 +37,10 @@
 				<legend class="scheduler-border">FORMULARIO DE REPORTES</legend>
 				<div class = 'row' >
 					<div class = 'col-md-3' >
-						<input type = 'text'  value="2017-7-01" id = 'fecha_desde' class = 'form-control fechas' placeholder = 'DESDE' />
+						<input type = 'date' data-date="" data-date-format="YYYY MMMM DD" value="2017-7-01" id = 'fecha_desde' class = 'form-control fechas' placeholder = 'DESDE' />
 					</div>
 					<div class = 'col-md-3' >
-						<input type = 'text'  value="2017-7-31" id = 'fecha_hasta' class = 'form-control fechas' placeholder = 'HASTA'/>
+						<input type = 'date' data-date="" data-date-format="YYYY MMMM DD" value="2017-7-31" id = 'fecha_hasta' class = 'form-control fechas' placeholder = 'HASTA'/>
 					</div>
 					<div class = 'col-md-3' >
 						<select class="form-control empresa_combo" id="empresa" aria-describedby="basic-addon3">
@@ -73,6 +73,7 @@
 				if(fecha_desde == '' || fecha_hasta == ''){
 					
 				}else{
+					//alert(fecha_desde + ' <<>> ' + fecha_hasta)
 					var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000);
 					db.transaction(function(tx){
 						tx.executeSql('SELECT c.nombre as nom, c.apellido as ape , m.nombre as plato , m.precio as pre , up.cantidad as cuantos FROM usu_pedido as up ,  cliente as c , empresa as e , menu as m WHERE up.fecha >= ? and up.fecha <= ? and e.id = ? and up.id_cli = c.id and c.id_emp = e.id and up.id_pro = m.id;',[fecha_desde , fecha_hasta,empresa],function(tx,results){
