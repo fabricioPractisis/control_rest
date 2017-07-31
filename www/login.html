@@ -11,6 +11,11 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css" />
 	</head>
 	<body onload = "$('#username').focus();">
+		<div class="row" style="background-color:#1B5583;">
+					<div class="col-lg-12" style="text-align:center; vertical-align:middle;">
+						<center><img src="img/logo1.png" style="width:50px" /></center>
+					</div>
+				</div>
 		<div id="login">
 			<div style="border:2px solid #1B5583; padding-bottom:20px;">
 				<div class="row" style="margin-top:50px;">
@@ -111,8 +116,10 @@
 				if(username == '' || pass == ''){
 					
 				}else{
+					var ruta = 'http://www.lcodigo.com/ticket/apiMovil/baja_empresas.php';
 					$('#loadLogin').css('display','block');
-					$.post("http://www.lcodigo.com/ticket/apiMovil/baja_empresas.php",{ 
+					alert(ruta);
+					$.post(ruta,{ 
 						pass : pass , username : username
 					}).done(function(data){
 						alert(data);
