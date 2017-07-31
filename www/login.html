@@ -11,20 +11,20 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css" />
 	</head>
 	<body onload = "$('#username').focus();">
-		<div class="row" style="background-color:#1B5583;">
-					<div class="col-lg-12" style="text-align:center; vertical-align:middle;">
-						<center><img src="img/logo1.png" style="width:50px" /></center>
-					</div>
-				</div>
 		<div id="login">
 			<div style="border:2px solid #1B5583; padding-bottom:20px;">
+				<div class="row" style="background-color:#1B5583;">
+					<div class="col-lg-12" style="text-align:center; vertical-align:middle;">
+						<img src="img/logo.png" style="width:100%; max-width:300px;" />
+					</div>
+				</div>
 				<div class="row" style="margin-top:50px;">
 					<div class="col-lg-12">
 						<div class="input-group">
 							<span class="input-group-addon" id="basic-addon1">
 								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 							</span>
-							<input type="text" class="form-control" placeholder="ingrese usuario" aria-describedby="basic-addon1" id="username" />
+							<input type="text" class="form-control" placeholder="ingrese clave de app" aria-describedby="basic-addon1" id="username" />
 						</div>
 					</div>
 				</div>
@@ -34,14 +34,14 @@
 							<span class="input-group-addon" id="basic-addon1">
 								<span class="glyphicon glyphicon-oil" aria-hidden="true"></span>
 							</span>
-							<input type="password" class="form-control" placeholder="***********" aria-describedby="basic-addon1" id="pass" />
+							<input type="number" class="form-control" placeholder="Ingrese id de evento ej : 49" aria-describedby="basic-addon1" id="id_con" />
 							
 						</div>
 					</div>
 				</div>
 				<div class="row" style="margin-top:25px; text-align:center;" id="botones">
 					<div class="col-lg-12" style="vertical-align:middle;">
-						
+						<button class="btn btn-default" type="button">Cancelar</button>
 						<button class="btn btn-primary" type="button" id = 'sin_loguear' style = 'display:none;' onclick="valida_log_acceso()">
 							Ingresar
 							<img src = 'img/loading.gif' style = 'display:none;width:20px;' id = 'loadLogin'/>
@@ -84,7 +84,7 @@
 			function ver_sesiones(){
 				var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000);
 				db.transaction(function(tx){
-					tx.executeSql('SELECT * FROM usu_empresas',[],function(tx,results){
+					tx.executeSql('SELECT * FROM concieto',[],function(tx,results){
 						var registros = results.rows.length;
 						if(registros == 0){
 							//alert('no hay');
@@ -99,28 +99,26 @@
 				});
 			}
 			function valida_log_acceso_conSesion(){
-				window.location = 'index.html';
+				window.location = 'subpages/ingreso.html';
 			}
 			function valida_log_acceso(){
 				var username = $('#username').val();
-				var pass = $('#pass').val();
+				var id_con = $('#id_con').val();
 				
 				if(username == ''){
 					alert('ingrese su usuario');
 				}
 				
-				if(pass == ''){
-					alert('ingrese password');
+				if(id_con == ''){
+					alert('ingrese el identificador del evento');
 				}
 				
-				if(username == '' || pass == ''){
+				if(username == '' || id_con == ''){
 					
 				}else{
-					var ruta = 'http://www.lcodigo.com/ticket/apiMovil/baja_empresas.php';
 					$('#loadLogin').css('display','block');
-					alert(ruta);
-					$.post(ruta,{ 
-						pass : pass , username : username
+					$.post("http://www.lcodigo.com/ticket/apiMovil/baja_localidadades.php",{ 
+						id_con : id_con , username : username
 					}).done(function(data){
 						alert(data);
 						if($.trim(data)=='error'){
@@ -130,47 +128,85 @@
 								alert('su clave ingresada es incorrecta !!!');
 								window.location = '';
 							}else{
-							
-							
 								var res = data.split("|"); 
-										//alert(res[1]);
+								//alert(res[1]);
 								var objDatos=JSON.parse(res[0]);
-								var locales=objDatos.Empresas;
-								//alert(locales.length);
+								var locales=objDatos.Localidades;
+								alert(locales.length);
 								var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000);
 								db.transaction(function(tx){
 									for(i=0; i < locales.length; i++){
-										var id = locales[i].id; 
-										var nombre = locales[i].nombre; 
-										var usuario = locales[i].usuario; 
-										var pass = locales[i].pass; 
-										//alert('id : ' + id + '  nombre : ' + nombre +  ' usuario : ' +  usuario + ' pass : ' + pass );
-										tx.executeSql("INSERT OR IGNORE INTO usu_empresas (nombre , usu , pass) VALUES (?,?,?)",[nombre,usuario,pass]);
+										var idLocalidad = locales[i].idLocalidad; 
+										var strDescripcionL = locales[i].strDescripcionL;
+										
+										tx.executeSql("INSERT OR IGNORE INTO localidad (id_con,id_loc,nombre) VALUES (?,?,?)",[id_con,idLocalidad,strDescripcionL]);
 									
-										tx.executeSql('UPDATE usu_empresas SET nombre = ?,usu = ? , pass = ? WHERE id = ?;',[nombre,usuario,pass,id]);
+										tx.executeSql('UPDATE localidad SET id_loc = ?,nombre= ? WHERE id_loc = ?;',[idLocalidad,strDescripcionL,idLocalidad]);
 										
 									}
+										tx.executeSql("INSERT INTO concieto (id_con,nombre_c) VALUES (?,?)",[id_con,res[1]]);
 								},errorCB,successCB);
 								$('#loadLogin').css('display','none');
-								//alert("acceso correcto.");
-								setTimeout(function(){
-									var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000);
-									db.transaction(function(tx){
-										tx.executeSql('SELECT * FROM usu_empresas',[],function(tx,results){
-											var registros = results.rows.length;
-											if(registros == 0){
-												
-											}else{
-												window.location='index.html';
-											}
-										},errorCB,successCB);
-									});
-								}, 2000);
+								alert("Datos descargado con éxito.");
+								window.location = 'subpages/ingreso.html';
 							}
 						}
-					});
+					}).fail(function(xhr, status, error) {
+						alert(status);
+					});	
 				}
 			}
 		</script>
+		<!--<div id="control" style="display:none;">
+			<div class="row">
+				<div class="col-lg-3">
+					<img src="img/ticketfacilnegro.png" style="width:100%; max-width:250px;" />
+				</div>
+				<div class="col-lg-3" style="text-align:right; vertical-align:middle; padding:20px 0px;">
+					<button class="btn btn-success" type="button">
+						<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+						Download
+					</button>
+				</div>
+				<div class="col-lg-3" style="text-align:left; vertical-align:middle; padding:20px 0px;">
+					<button class="btn btn-primary" type="button">
+						<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+						Upload
+					</button>
+				</div>
+				<div class="col-lg-3" style="text-align:right; vertical-align:middle; padding:20px 0px;">
+					<button class="btn btn-danger" type="button" onclick="logout()">
+						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+						Log Out
+					</button>
+				</div>
+			</div>
+			<div class="row" style="margin-top:10%;">
+				<div class="col-lg-4 col-lg-push-4">
+					<div class="input-group">
+						<span class="input-group-addon" id="basic-addon1">
+							<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+						</span>
+						<input type="text" class="form-control" aria-describedby="basic-addon1" id="codigo" onkeypress="saltar(event)">
+						<span class="input-group-addon">
+							Código
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top:2%;">
+				<div class="col-lg-4 col-lg-push-4">
+					<div class="input-group">
+						<span class="input-group-addon" id="basic-addon1">
+							<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+						</span>
+						<input type="text" class="form-control" aria-describedby="basic-addon1" id="cedula" onkeypress="validarBoleto(event)">
+						<span class="input-group-addon">
+							Cédula
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>-->
 	</body>
 </html>
