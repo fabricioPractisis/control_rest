@@ -15,7 +15,8 @@
 			<div style="border:2px solid #1B5583; padding-bottom:20px;">
 				<div class="row" style="background-color:#1B5583;">
 					<div class="col-lg-12" style="text-align:center; vertical-align:middle;">
-						<img src="img/logo.png" style="width:100%; max-width:300px;" />
+						<h3 style = 'color:#fff;' >CONTROL RESTAURANTE</h3><br>
+						<img src="img/logo1.png" style="width:50px;" />
 					</div>
 				</div>
 				<div class="row" style="margin-top:50px;">
@@ -24,7 +25,7 @@
 							<span class="input-group-addon" id="basic-addon1">
 								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 							</span>
-							<input type="text" class="form-control" placeholder="ingrese clave de app" aria-describedby="basic-addon1" id="username" />
+							<input type="text" class="form-control" placeholder="usuario" aria-describedby="basic-addon1" id="username" />
 						</div>
 					</div>
 				</div>
@@ -34,19 +35,19 @@
 							<span class="input-group-addon" id="basic-addon1">
 								<span class="glyphicon glyphicon-oil" aria-hidden="true"></span>
 							</span>
-							<input type="number" class="form-control" placeholder="Ingrese id de evento ej : 49" aria-describedby="basic-addon1" id="id_con" />
+							<input type="text" class="form-control" placeholder="password" aria-describedby="basic-addon1" id="id_con" />
 							
 						</div>
 					</div>
 				</div>
 				<div class="row" style="margin-top:25px; text-align:center;" id="botones">
 					<div class="col-lg-12" style="vertical-align:middle;">
-						<button class="btn btn-default" type="button">Cancelar</button>
-						<button class="btn btn-primary" type="button" id = 'sin_loguear' style = 'display:none;' onclick="valida_log_acceso()">
+						
+						<button class="btn btn-primary" type="button" id = 'sin_loguear'  onclick="valida_log_acceso()">
 							Ingresar
-							<img src = 'img/loading.gif' style = 'display:none;width:20px;' id = 'loadLogin'/>
+							<center><img src = 'img/loading.gif' style = 'display:none;width:20px;' id = 'loadLogin'/></center>
 						</button>
-						<button class="btn btn-success" type="button" id = 'ya_logueado' onclick="valida_log_acceso_conSesion()" >Ingresar</button>
+						<!-- <button class="btn btn-success" type="button" id = 'ya_logueado' onclick="valida_log_acceso_conSesion()" >Ingresar</button> -->
 					</div>
 				</div>
 				<div class="row" style="margin-top:25px; display:none;" id="loading">
@@ -80,24 +81,24 @@
 			<div id="boletos" style="display:block;"></div>
 		</div>
 		<script>
-			ver_sesiones(); 
-			function ver_sesiones(){
-				var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000);
-				db.transaction(function(tx){
-					tx.executeSql('SELECT * FROM concieto',[],function(tx,results){
-						var registros = results.rows.length;
-						if(registros == 0){
-							//alert('no hay');
-							$('#sin_loguear').fadeIn('slow');
-							$('#ya_logueado').css('display','none');
-						}else{
-							//alert('si hay');
-							$('#sin_loguear').css('display','none');
-							$('#ya_logueado').fadeIn('slow');
-						}
-					},errorCB,successCB);
-				});
-			}
+			<!-- ver_sesiones();  -->
+			<!-- function ver_sesiones(){ -->
+				<!-- var db = window.openDatabase("Database", "1.0", "TicketMobile", 200000); -->
+				<!-- db.transaction(function(tx){ -->
+					<!-- tx.executeSql('SELECT * FROM concieto',[],function(tx,results){ -->
+						<!-- var registros = results.rows.length; -->
+						<!-- if(registros == 0){ -->
+							<!-- //alert('no hay'); -->
+							<!-- $('#sin_loguear').fadeIn('slow'); -->
+							<!-- $('#ya_logueado').css('display','none'); -->
+						<!-- }else{ -->
+							<!-- //alert('si hay'); -->
+							<!-- $('#sin_loguear').css('display','none'); -->
+							<!-- $('#ya_logueado').fadeIn('slow'); -->
+						<!-- } -->
+					<!-- },errorCB,successCB); -->
+				<!-- }); -->
+			<!-- } -->
 			function valida_log_acceso_conSesion(){
 				window.location = 'subpages/ingreso.html';
 			}
@@ -120,7 +121,7 @@
 					$.post("http://www.lcodigo.com/ticket/apiMovil/baja_localidadades.php",{ 
 						id_con : id_con , username : username
 					}).done(function(data){
-						alert(data);
+						//alert(data);
 						if($.trim(data)=='error'){
 							alert('no hay datos para ese evento : ' + id_con)
 						}else{
